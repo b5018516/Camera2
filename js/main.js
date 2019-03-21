@@ -73,7 +73,10 @@ async function start() {
 function getSelectedSdpSemantics() {
   const sdpSemanticsSelect = document.querySelector('#sdpSemantics');
   const option = sdpSemanticsSelect.options[sdpSemanticsSelect.selectedIndex];
-  return option.value === '' ? {} : {sdpSemantics: option.value};
+  return option.value === '' ? {} : {sdpSemantics: option.value, iceServers: 
+      [{url:'stun:stun.services.mozilla.com'}, {url:'stun:stun.l.google.com:19302'}]
+    };
+
 }
 
 async function call() {
@@ -94,8 +97,10 @@ async function call() {
   pc1 = new RTCPeerConnection(configuration);
   console.log('Created local peer connection object pc1');
   pc1.addEventListener('icecandidate', e => onIceCandidate(pc1, e));
+  
   pc2 = new RTCPeerConnection(configuration);
   console.log('Created remote peer connection object pc2');
+  
   pc2.addEventListener('icecandidate', e => onIceCandidate(pc2, e));
   pc1.addEventListener('iceconnectionstatechange', e => onIceStateChange(pc1, e));
   pc2.addEventListener('iceconnectionstatechange', e => onIceStateChange(pc2, e));
